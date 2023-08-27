@@ -49,19 +49,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public AppointmentDTO createAppointment(AppointmentDTO appointmentDTO) {
-        Appointment appointment = maptoEntity(appointmentDTO);
-
-        // Save the appointment entity
-        Appointment savedAppointment = appointmentRepository.save(appointment);
-        AppointmentDTO savedAppointmentDTO = MaptoDto(savedAppointment);
-        Optional<Doctor> byId = doctorRepository.findById(savedAppointmentDTO.getDoctor().getId());
-        Doctor doctor = byId.get();
-        savedAppointmentDTO.setDoctor(mapTODoctorDto(doctor));
-
-        Optional<Patient> byId1 = patientRepository.findById(savedAppointmentDTO.getPatient().getId());
-        Patient patient = byId1.get();
-        savedAppointmentDTO.setPatient(maptoPatientDto(patient));
-        return savedAppointmentDTO;
+       
     }
 
     private AppointmentDTO MaptoDto(Appointment appointment1) {
