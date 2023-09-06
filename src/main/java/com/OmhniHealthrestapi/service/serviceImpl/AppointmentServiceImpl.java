@@ -49,7 +49,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public AppointmentDTO createAppointment(AppointmentDTO appointmentDTO) {
-       
+
     }
 
     private AppointmentDTO MaptoDto(Appointment appointment1) {
