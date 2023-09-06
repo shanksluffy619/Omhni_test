@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -49,6 +50,34 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public AppointmentDTO createAppointment(AppointmentDTO appointmentDTO) {
+
+        Long did = appointmentDTO.getDoctor().getId();
+        Long pid = appointmentDTO.getPatient().getId();
+        Optional<Doctor> DocId = doctorRepository.findById(did);
+
+        Optional<Patient> PatientId = patientRepository.findById(pid);
+        if(!DocId.isPresent()){
+            throw  new ResourceNotFound("doctor","id", appointmentDTO.getDoctor().getId());
+        }
+
+        if(!PatientId.isPresent()){
+
+            throw new ResourceNotFound("patient","id", appointmentDTO.getDoctor().getId());
+        }
+        Appointment appointment = maptoEntity(appointmentDTO);
+        Appointment appointment1 = appointmentRepository.save(appointment);
+        AppointmentDTO appointmentDTO1 = MaptoDto(appointment1);
+
+        Optional<Doctor> byId = doctorRepository.findById(appointment1.getDoctor().getId());
+        Doctor doctor = byId.get();
+
+        appointmentDTO1.setDoctor(mapTODoctorDto(doctor));
+
+        Optional<Patient> byId1 = patientRepository.findById(appointment1.getPatient().getId());
+        Patient patient = byId1.get();
+
+        appointmentDTO1.setPatient(maptoPatientDto(patient));
+        return  appointmentDTO1;
 
     }
 
